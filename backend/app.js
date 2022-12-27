@@ -44,6 +44,18 @@ app.use("/api/v1", bookRoutesAdmin);
 //   res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
 // });
 
+// Admin Site Build Path
+// app.use('/admin/', express.static(path.join(__dirname, '../../admin')))
+// app.get('/admin/*', function (req, res) {
+//   res.sendFile(path.join(__dirname, '../../admin', 'index.html'));
+// });
+
+// Front Site Build Path
+// app.use('/', express.static(path.join(__dirname, '../../build')))
+// app.get('/*', function (req, res) {
+//   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
+// });
+
 // Middleware for Errors
 app.use(errorMiddleware);
 

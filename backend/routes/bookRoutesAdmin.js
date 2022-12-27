@@ -13,7 +13,8 @@ const express = require("express");
 
 const {
   getAllBooksAdmin,
-  createProductAdmin,
+  createBookAdmin,
+  deleteBook,
 } = require("../controllers/bookControllerAdmin");
 // const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
@@ -24,11 +25,12 @@ router.route("/admin/books").get(getAllBooksAdmin);
 //   .route("/admin/products")
 //   .get(isAuthenticatedUser, authorizeRoles("admin"), getAdminProducts);
 
-router.route("/admin/book/new").post(createProductAdmin);
+router.route("/admin/book/new").post(createBookAdmin);
 // router
 //   .route("/admin/product/new")
 //   .post(isAuthenticatedUser, authorizeRoles("admin"), createProduct);
 
+router.route("/admin/book/:id").delete(deleteBook);
 // router
 //   .route("/admin/product/:id")
 //   .put(isAuthenticatedUser, authorizeRoles("admin"), updateProduct)

@@ -13,7 +13,7 @@ const SearchResult = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       let response = await axios.get(
-        "http://localhost:4000/api/v1/admin/books"
+        "http://localhost:4000/api/v1/admin/book/new"
       );
       console.log(response.data);
     };
