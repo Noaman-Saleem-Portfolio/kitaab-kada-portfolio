@@ -1,43 +1,62 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom"; // version 5.2.0
 
 // react-bootstrap components
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
-import axios from "axios";
+import { useParams } from "react-router-dom";
 
-function Create() {
+function UpdateBookForm() {
+  const [book, setBook] = useState({});
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("all");
+  const [category, setCategory] = useState("");
   const [stock, setStock] = useState("");
 
   const history = useHistory();
   const navigateToList = (route) => history.push(route);
 
-  //handle create logic
-  const handleCreate = async (e) => {
+  const params = useParams();
+  // console.log(params.id);
+
+  //handleUpdate
+  const handleUpdate = async (e) => {
+    // console.log("handle");
     e.preventDefault();
-    // console.log(author);
-
-    const response = await axios.post(
-      `http://localhost:4000/api/v1/admin/book/new`,
-      {
-        title,
-        author,
-        description,
-        price,
-        category,
-        stock,
-      }
+    const updatedObject = {
+      title,
+      author,
+      description,
+      price,
+      category,
+      stock,
+    };
+    // console.log(updatedObject);
+    await axios.put(
+      `http://localhost:4000/api/v1/admin/book/${params.id}`,
+      updatedObject
     );
-
-    // console.log(response);
-
     navigateToList("/admin/table");
   };
 
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const response = await axios.get(
+        `http://localhost:4000/api/v1/admin/book/${params.id}`
+      );
+      const { book } = response.data;
+      setBook(book);
+      setTitle(book.title);
+      setAuthor(book.author);
+      setDescription(book.description);
+      setPrice(book.price);
+      setCategory(book.category);
+      setStock(book.stock);
+    };
+    fetchBooks();
+  }, []);
   return (
     <>
       <Container fluid>
@@ -45,7 +64,7 @@ function Create() {
           <Col md="12">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">Add New Book</Card.Title>
+                <Card.Title as="h4">Update Book Info</Card.Title>
               </Card.Header>
               <Card.Body>
                 <Form>
@@ -55,7 +74,7 @@ function Create() {
                         <label>Title</label>
                         <Form.Control
                           onChange={(e) => setTitle(e.target.value)}
-                          defaultValue={title}
+                          defaultValue={book.title}
                           placeholder="Company"
                           type="text"></Form.Control>
                       </Form.Group>
@@ -65,7 +84,7 @@ function Create() {
                         <label>Author</label>
                         <Form.Control
                           onChange={(e) => setAuthor(e.target.value)}
-                          defaultValue={author}
+                          defaultValue={book.author}
                           placeholder="Author Name"
                           type="text"></Form.Control>
                       </Form.Group>
@@ -77,7 +96,7 @@ function Create() {
                         <label>Price</label>
                         <Form.Control
                           onChange={(e) => setPrice(e.target.value)}
-                          defaultValue={price}
+                          defaultValue={book.price}
                           placeholder="Price"
                           type="text"></Form.Control>
                       </Form.Group>
@@ -87,7 +106,7 @@ function Create() {
                         <label>Stock</label>
                         <Form.Control
                           onChange={(e) => setStock(e.target.value)}
-                          defaultValue={stock}
+                          defaultValue={book.stock}
                           placeholder="Stock"
                           type="text"></Form.Control>
                       </Form.Group>
@@ -100,29 +119,19 @@ function Create() {
                         <Form.Control
                           onChange={(e) => setDescription(e.target.value)}
                           as={"textarea"}
-                          defaultValue={description}
+                          defaultValue={book.description}
                           placeholder="Add Description ........"
                           type="text"></Form.Control>
                       </Form.Group>
                     </Col>
-                    <Col style={{ margin: "auto" }}>
-                      <Form.Select
-                        aria-label="Default select example"
-                        onChange={(e) => setCategory(e.target.value)}>
-                        <option value="all">Category</option>
-                        <option value="novel">Novel</option>
-                        <option value="health">Health</option>
-                        <option value="business">Business</option>
-                      </Form.Select>
-                    </Col>
                   </Row>
                   <Button
-                    onClick={(e) => handleCreate(e)}
+                    onClick={(e) => handleUpdate(e)}
                     className="btn-fill pull-right"
                     type="submit"
                     variant="info"
                     style={{ marginTop: "10px" }}>
-                    Create Book
+                    Update Profile
                   </Button>
                   <div className="clearfix"></div>
                 </Form>
@@ -135,4 +144,4 @@ function Create() {
   );
 }
 
-export default Create;
+export default UpdateBookForm;

@@ -14,7 +14,7 @@ exports.getAllBooksAdmin = catchAsyncErrors(async (req, res, next) => {
     success: true,
     booksCount,
     books,
-    // message: "All Books Fetched for Admin Successfully!",
+    message: "All Books Fetched for Admin Successfully!",
   });
 });
 
@@ -31,15 +31,72 @@ exports.createBookAdmin = catchAsyncErrors(async (req, res, next) => {
   //   });
   // book.save();
   // }
+  let { title, author, description, category, price, stock } = req.body;
+  price = parseInt(price);
+  stock = parseInt(stock);
+  console.log({ title, author, description, category, price, stock });
 
-  const book = await new Book(req.body);
-  book.save();
+  try {
+    const book = await new Book({
+      title,
+      author,
+      description,
+      category,
+      price,
+      stock,
+    });
+    book.save();
 
-  // 201 "created"
-  res.status(201).json({
+    // 201 "created"
+    res.status(201).json({
+      success: true,
+      book,
+      message: "Book created successfully!",
+    });
+  } catch (error) {
+    console.log("OHHHHHHHHHHHHHHH", error);
+    next(error);
+  }
+});
+
+// Update Book
+
+exports.updateBook = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  // console.log(req.body);
+  const book = await Book.findById(id);
+
+  if (!book) {
+    return next(new ErrorHander("Book not found", 404));
+  }
+  const updatedBook = await Book.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(200).json({
+    success: true,
+    updatedBook,
+    message: "Book has been updated successfully!",
+  });
+});
+
+//Show Details
+
+exports.getBookDetails = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  // console.log(id);
+  const book = await Book.findById(id);
+
+  if (!book) {
+    return next(new ErrorHander("Book not found", 404));
+  }
+
+  res.status(200).json({
     success: true,
     book,
-    message: "Book created successfully!",
+    message: "Book found successfully!",
   });
 });
 

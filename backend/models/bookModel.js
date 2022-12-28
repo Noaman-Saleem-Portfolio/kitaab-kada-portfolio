@@ -7,7 +7,7 @@ const bookSchema = mongoose.Schema({
     trim: true,
   },
   author: {
-    name: String,
+    type: String,
   },
   description: {
     type: String,

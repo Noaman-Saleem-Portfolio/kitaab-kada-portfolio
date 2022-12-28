@@ -23,6 +23,7 @@ import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import Icons from "views/Icons.js";
 import Notifications from "views/Notifications.js";
+import UpdateBookForm from "views/UpdateBookForm.js";
 
 const dashboardRoutes = [
   {
@@ -58,11 +59,19 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
+    path: "/book/:id",
+    name: "update book",
+    icon: "nc-icon nc-notes",
+    component: UpdateBookForm,
+    showInSideBar: false,
+    layout: "/admin",
+  },
+  {
     path: "/create",
-    name: "Create",
+    name: "Add New Book",
     icon: "nc-icon nc-notes",
     component: Create,
-    showInSideBar: false,
+    showInSideBar: true,
     layout: "/admin",
   },
   {

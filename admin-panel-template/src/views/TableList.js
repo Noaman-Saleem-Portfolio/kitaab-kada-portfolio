@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom"; // version 5.2.0
 
 // react-bootstrap components
 import { Card, Table, Container, Row, Col } from "react-bootstrap";
@@ -13,8 +14,15 @@ function TableList() {
   const [booksCount, setBooksCount] = useState(0);
   const [isDeleted, setIsDeleted] = useState(false);
 
+  const history = useHistory();
+  const navigateToUpdateRoute = (route) => history.push(route);
+
+  const renderUpdate = (e, route) => {
+    navigateToUpdateRoute(route);
+  };
+
   const handleDelete = async (e) => {
-    console.log(e.currentTarget.id);
+    // console.log(e.currentTarget.id);
     const response = await axios.delete(
       `http://localhost:4000/api/v1/admin/book/${e.currentTarget.id}`
     );
@@ -65,11 +73,22 @@ function TableList() {
                 <Table className="table-hover table-striped">
                   <thead>
                     <tr>
-                      {Object.keys(books[0]).map((c, index) => (
-                        <th key={index} className="border-0">
-                          {c}
-                        </th>
-                      ))}
+                      {Object.keys(books[0]).map((c, index) => {
+                        //Eliminate _id as column name
+                        if (c === "_id") {
+                          return (
+                            <th key={index} className="border-0">
+                              Serial No
+                            </th>
+                          );
+                        } else {
+                          return (
+                            <th key={index} className="border-0">
+                              {c === "price" ? "$ " + c : c}
+                            </th>
+                          );
+                        }
+                      })}
                       <th className="border-0">Update</th>
                       <th className="border-0">Delete</th>
                       {/* <th className="border-0">ID</th>
@@ -83,16 +102,21 @@ function TableList() {
                     {books.map((b, index) => {
                       return (
                         <tr key={index}>
-                          <td>{b.stock}</td>
-                          <td>{b._id}</td>
+                          <td>{index + 1}</td>
                           <td>{b.title}</td>
-                          <td>{b.description}</td>
+                          <td>
+                            {b.description.slice(0, 15) +
+                              (b.description.length > 15 ? "..." : "")}
+                          </td>
                           <td>{b.price}</td>
-                          <td>{b.category}</td>
+                          <td>{b.category ? b.category : "Not-set"}</td>
+                          <td>{b.stock}</td>
                           <td>
                             <Button
                               id={b._id}
-                              onClick={(e) => handleUpdate(e)}
+                              onClick={(e) =>
+                                renderUpdate(e, `/admin/book/${b._id}`)
+                              }
                               variant="success"
                               size="sm">
                               Update
