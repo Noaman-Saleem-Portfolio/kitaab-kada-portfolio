@@ -44,11 +44,23 @@ app.use("/api/v1", bookRoutesAdmin);
 //   res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
 // });
 
+// console.log(path.join(__dirname, "../admin-panel-template/build"));
+// console.log(path.join(__dirname, "./admin-panel-template/build"));
 // Admin Site Build Path
-// app.use('/admin/', express.static(path.join(__dirname, '../../admin')))
-// app.get('/admin/*', function (req, res) {
-//   res.sendFile(path.join(__dirname, '../../admin', 'index.html'));
-// });
+
+// app.use(
+//   "/admin/",
+//   express.static(path.join(__dirname, "../admin-panel-template/build"))
+// );
+
+// Working Code Serving Admin React App Build
+app.use(express.static(path.join(__dirname, "../admin-panel-template/build")));
+app.get("/admin/*", function (req, res) {
+  console.log("kkkkkkkkkkkkkkkkkkkvvvvvvvvvvvvvvvvvv");
+  res.sendFile(
+    path.resolve(__dirname, "../admin-panel-template/build/index.html")
+  );
+});
 
 // Front Site Build Path
 // app.use('/', express.static(path.join(__dirname, '../../build')))

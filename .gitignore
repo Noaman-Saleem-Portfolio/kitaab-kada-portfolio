@@ -10,6 +10,7 @@
 
 # production
 /frontend/build
+/admin-panel-template/build
 
 # misc
 /backend/config/config.env
