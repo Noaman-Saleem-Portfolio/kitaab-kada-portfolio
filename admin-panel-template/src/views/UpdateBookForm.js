@@ -3,7 +3,16 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom"; // version 5.2.0
 
 // react-bootstrap components
-import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Form,
+  Container,
+  Row,
+  Col,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 function UpdateBookForm() {
@@ -14,6 +23,10 @@ function UpdateBookForm() {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [stock, setStock] = useState("");
+
+  //bootstrap toast
+  const [showToast, setShowToast] = useState(false);
+  const [toastErrorMessage, setToastErrorMessage] = useState("");
 
   const history = useHistory();
   const navigateToList = (route) => history.push(route);
@@ -34,11 +47,20 @@ function UpdateBookForm() {
       stock,
     };
     // console.log(updatedObject);
-    await axios.put(
-      `http://localhost:4000/api/v1/admin/book/${params.id}`,
-      updatedObject
-    );
-    navigateToList("/admin/table");
+    axios
+      .put(
+        `http://localhost:4000/api/v1/admin/book/${params.id}`,
+        updatedObject
+      )
+      .then((response) => {
+        console.log("Response:", response);
+        navigateToList("/admin/table");
+      })
+      .catch((e) => {
+        // console.log("Error ---> ", e);
+        setToastErrorMessage(e.response.data.message);
+        setShowToast(true);
+      });
   };
 
   useEffect(() => {
@@ -61,6 +83,44 @@ function UpdateBookForm() {
     <>
       <Container fluid>
         <Row>
+          <Col xs={6}>
+            <div
+              aria-live="polite"
+              aria-atomic="true"
+              className=" position-absolute"
+              style={{
+                minHeight: "100px",
+                zIndex: "999",
+                width: "800px",
+                opacity: "0.9",
+              }}>
+              <ToastContainer position="bottom-end" className="p-3">
+                <Toast
+                  onClose={() => setShowToast(false)}
+                  bg="danger"
+                  show={showToast}
+                  delay={3000}
+                  autohide>
+                  <Toast.Header>
+                    <img
+                      src="holder.js/20x20?text=%20"
+                      className="rounded me-2"
+                      alt=""
+                    />
+                    <strong className="me-auto">Message</strong>
+                    {/* <small>11 mins ago</small> */}
+                  </Toast.Header>
+                  <Toast.Body className="text-white">
+                    {toastErrorMessage}
+                  </Toast.Body>
+                </Toast>
+              </ToastContainer>
+            </div>
+            {/* Toast Div */}
+          </Col>
+        </Row>
+
+        <Row>
           <Col md="12">
             <Card>
               <Card.Header>
@@ -73,9 +133,12 @@ function UpdateBookForm() {
                       <Form.Group>
                         <label>Title</label>
                         <Form.Control
-                          onChange={(e) => setTitle(e.target.value)}
+                          onInput={(e) => {
+                            setTitle(e.target.value);
+                            // console.log(title);
+                          }}
                           defaultValue={book.title}
-                          placeholder="Company"
+                          placeholder="Enter Title"
                           type="text"></Form.Control>
                       </Form.Group>
                     </Col>
@@ -83,7 +146,7 @@ function UpdateBookForm() {
                       <Form.Group>
                         <label>Author</label>
                         <Form.Control
-                          onChange={(e) => setAuthor(e.target.value)}
+                          onInput={(e) => setAuthor(e.target.value)}
                           defaultValue={book.author}
                           placeholder="Author Name"
                           type="text"></Form.Control>
@@ -95,7 +158,7 @@ function UpdateBookForm() {
                       <Form.Group>
                         <label>Price</label>
                         <Form.Control
-                          onChange={(e) => setPrice(e.target.value)}
+                          onInput={(e) => setPrice(e.target.value)}
                           defaultValue={book.price}
                           placeholder="Price"
                           type="text"></Form.Control>
@@ -105,7 +168,7 @@ function UpdateBookForm() {
                       <Form.Group>
                         <label>Stock</label>
                         <Form.Control
-                          onChange={(e) => setStock(e.target.value)}
+                          onInput={(e) => setStock(e.target.value)}
                           defaultValue={book.stock}
                           placeholder="Stock"
                           type="text"></Form.Control>
@@ -117,12 +180,39 @@ function UpdateBookForm() {
                       <Form.Group>
                         <label>Description</label>
                         <Form.Control
-                          onChange={(e) => setDescription(e.target.value)}
+                          onInput={(e) => setDescription(e.target.value)}
                           as={"textarea"}
                           defaultValue={book.description}
                           placeholder="Add Description ........"
                           type="text"></Form.Control>
                       </Form.Group>
+                    </Col>
+
+                    <Col style={{ margin: "auto" }}>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setCategory(e.target.value)}>
+                        <option
+                          {...(category === "business" ? selected : "")}
+                          value="all">
+                          Category
+                        </option>
+                        <option
+                          {...(category === "novel" ? selected : "")}
+                          value="novel">
+                          Novel
+                        </option>
+                        <option
+                          {...(category === "health" ? selected : "")}
+                          value="health">
+                          Health
+                        </option>
+                        <option
+                          {...(category === "business" ? selected : "")}
+                          value="business">
+                          Business
+                        </option>
+                      </Form.Select>
                     </Col>
                   </Row>
                   <Button

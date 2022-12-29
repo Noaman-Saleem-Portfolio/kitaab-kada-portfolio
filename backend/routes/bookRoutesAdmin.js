@@ -1,4 +1,5 @@
 const express = require("express");
+const { validateBook } = require("../middleware/joiValidation");
 // const {
 //   getAllBooks,
 //   createBook,
@@ -22,17 +23,23 @@ const {
 
 const router = express.Router();
 
+//Get all books
 router.route("/admin/books").get(getAllBooksAdmin);
 // router
 //   .route("/admin/products")
 //   .get(isAuthenticatedUser, authorizeRoles("admin"), getAdminProducts);
 
-router.route("/admin/book/new").post(createBookAdmin);
+//Create new book
+router.route("/admin/book/new").post(validateBook, createBookAdmin);
 // router
 //   .route("/admin/product/new")
 //   .post(isAuthenticatedUser, authorizeRoles("admin"), createProduct);
 
-router.route("/admin/book/:id").delete(deleteBook).put(updateBook);
+//Delete and Update a book
+router
+  .route("/admin/book/:id")
+  .delete(deleteBook)
+  .put(validateBook, updateBook);
 // router
 //   .route("/admin/product/:id")
 //   .put(isAuthenticatedUser, authorizeRoles("admin"), updateProduct)

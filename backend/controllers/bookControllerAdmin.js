@@ -31,32 +31,27 @@ exports.createBookAdmin = catchAsyncErrors(async (req, res, next) => {
   //   });
   // book.save();
   // }
+  console.log("IN Create book controller.");
   let { title, author, description, category, price, stock } = req.body;
-  price = parseInt(price);
-  stock = parseInt(stock);
+
   console.log({ title, author, description, category, price, stock });
 
-  try {
-    const book = await new Book({
-      title,
-      author,
-      description,
-      category,
-      price,
-      stock,
-    });
-    book.save();
+  const book = await new Book({
+    title,
+    author,
+    description,
+    category,
+    price,
+    stock,
+  });
+  book.save();
 
-    // 201 "created"
-    res.status(201).json({
-      success: true,
-      book,
-      message: "Book created successfully!",
-    });
-  } catch (error) {
-    console.log("OHHHHHHHHHHHHHHH", error);
-    next(error);
-  }
+  // 201 "created"
+  res.status(201).json({
+    success: true,
+    book,
+    message: "Book created successfully!",
+  });
 });
 
 // Update Book

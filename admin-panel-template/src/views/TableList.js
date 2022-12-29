@@ -29,7 +29,7 @@ function TableList() {
     //ensuring that books has been successfully deleted from DB
     setIsDeleted(!isDeleted);
 
-    console.log(isDeleted);
+    // console.log(isDeleted);
   };
 
   useEffect(() => {
