@@ -53,7 +53,7 @@ const dashboardRoutes = [
   {
     path: "/table",
     name: "Show All Books",
-    icon: "nc-icon nc-notes",
+    icon: "nc-icon nc-zoom-split",
     component: TableList,
     showInSideBar: true,
     layout: "/admin",
@@ -69,7 +69,7 @@ const dashboardRoutes = [
   {
     path: "/create",
     name: "Add New Book",
-    icon: "nc-icon nc-notes",
+    icon: "nc-icon nc-layers-3",
     component: Create,
     showInSideBar: true,
     layout: "/admin",

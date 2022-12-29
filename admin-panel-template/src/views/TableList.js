@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom"; // version 5.2.0
+import { useHistory, useLocation } from "react-router-dom"; // version 5.2.0
 
 // react-bootstrap components
-import { Card, Table, Container, Row, Col } from "react-bootstrap";
+import {
+  Card,
+  Table,
+  Container,
+  Row,
+  Col,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 function TableList() {
@@ -14,8 +22,18 @@ function TableList() {
   const [booksCount, setBooksCount] = useState(0);
   const [isDeleted, setIsDeleted] = useState(false);
 
+  //bootstrap toast
+  const [showToast, setShowToast] = useState(false);
+  const [toastErrorMessage, setToastErrorMessage] = useState("");
+
+  // navigate To Update Route
   const history = useHistory();
   const navigateToUpdateRoute = (route) => history.push(route);
+
+  const location = useLocation();
+  // if (location.state.message) {
+  //   console.log(location.state.message);
+  // }
 
   const renderUpdate = (e, route) => {
     navigateToUpdateRoute(route);
@@ -26,6 +44,9 @@ function TableList() {
     const response = await axios.delete(
       `http://localhost:4000/api/v1/admin/book/${e.currentTarget.id}`
     );
+
+    setToastErrorMessage(response.data.message);
+    setShowToast(true);
     //ensuring that books has been successfully deleted from DB
     setIsDeleted(!isDeleted);
 
@@ -46,6 +67,11 @@ function TableList() {
         setIsError(true);
         setErrorMessage(response.data.message);
       }
+      if (location.state.message) {
+        console.log(location.state.message);
+        setToastErrorMessage(location.state.message);
+        setShowToast(true);
+      }
     };
     fetchBooks();
   }, [isDeleted]);
@@ -60,6 +86,44 @@ function TableList() {
   return (
     <>
       <Container fluid>
+        <Row>
+          <Col xs={6}>
+            <div
+              aria-live="polite"
+              aria-atomic="true"
+              className=" position-absolute"
+              style={{
+                minHeight: "100px",
+                zIndex: "999",
+                width: "800px",
+                opacity: "0.9",
+              }}>
+              <ToastContainer position="bottom-end" className="p-3">
+                <Toast
+                  onClose={() => setShowToast(false)}
+                  bg="danger"
+                  show={showToast}
+                  delay={3000}
+                  autohide>
+                  <Toast.Header>
+                    <img
+                      src="holder.js/20x20?text=%20"
+                      className="rounded me-2"
+                      alt=""
+                    />
+                    <strong className="me-auto">Message</strong>
+                    {/* <small>11 mins ago</small> */}
+                  </Toast.Header>
+                  <Toast.Body className="text-white">
+                    {toastErrorMessage}
+                  </Toast.Body>
+                </Toast>
+              </ToastContainer>
+            </div>
+            {/* Toast Div */}
+          </Col>
+        </Row>
+
         <Row>
           <Col md="12">
             <Card className="strpied-tabled-with-hover">

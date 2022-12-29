@@ -29,7 +29,13 @@ function UpdateBookForm() {
   const [toastErrorMessage, setToastErrorMessage] = useState("");
 
   const history = useHistory();
-  const navigateToList = (route) => history.push(route);
+
+  // navigate to List page
+  const navigateToList = (route, msg) =>
+    history.push({
+      pathname: route,
+      state: { message: msg },
+    });
 
   const params = useParams();
   // console.log(params.id);
@@ -53,8 +59,8 @@ function UpdateBookForm() {
         updatedObject
       )
       .then((response) => {
-        console.log("Response:", response);
-        navigateToList("/admin/table");
+        // console.log("Response:", response);
+        navigateToList("/admin/table", response.data.message);
       })
       .catch((e) => {
         // console.log("Error ---> ", e);
@@ -193,22 +199,22 @@ function UpdateBookForm() {
                         aria-label="Default select example"
                         onChange={(e) => setCategory(e.target.value)}>
                         <option
-                          {...(category === "business" ? selected : "")}
+                          selected={category === "all" ? "selected" : ""}
                           value="all">
                           Category
                         </option>
                         <option
-                          {...(category === "novel" ? selected : "")}
+                          selected={category === "novel" ? "selected" : ""}
                           value="novel">
                           Novel
                         </option>
                         <option
-                          {...(category === "health" ? selected : "")}
+                          selected={category === "health" ? "selected" : ""}
                           value="health">
                           Health
                         </option>
                         <option
-                          {...(category === "business" ? selected : "")}
+                          selected={category === "business" ? "selected" : ""}
                           value="business">
                           Business
                         </option>
