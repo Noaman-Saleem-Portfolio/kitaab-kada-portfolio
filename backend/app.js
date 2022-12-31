@@ -28,13 +28,13 @@ app.use(cors(corsOptions));
 // Route Imports
 const bookRoutes = require("./routes/bookRoutes");
 const bookRoutesAdmin = require("./routes/bookRoutesAdmin");
-// const user = require("./routes/userRoute");
+const userRoutes = require("./routes/userRoutes");
 // const order = require("./routes/orderRoute");
 // const payment = require("./routes/paymentRoute");
 
 app.use("/api/v1", bookRoutes);
 app.use("/api/v1", bookRoutesAdmin);
-// app.use("/api/v1", user);
+app.use("/api/v1", userRoutes);
 // app.use("/api/v1", order);
 // app.use("/api/v1", payment);
 
@@ -53,10 +53,12 @@ app.use("/api/v1", bookRoutesAdmin);
 //   express.static(path.join(__dirname, "../admin-panel-template/build"))
 // );
 
+// DB_URI=mongodb+srv://noaman:musawali@cluster0.qsypljh.mongodb.net/myKitabKada?retryWrites=true&w=majority
+
 // Working Code Serving Admin React App Build
 app.use(express.static(path.join(__dirname, "../admin-panel-template/build")));
 app.get("/admin/*", function (req, res) {
-  console.log("kkkkkkkkkkkkkkkkkkkvvvvvvvvvvvvvvvvvv");
+  // console.log("kkkkkkkkkkkkkkkkkkkvvvvvvvvvvvvvvvvvv");
   res.sendFile(
     path.resolve(__dirname, "../admin-panel-template/build/index.html")
   );

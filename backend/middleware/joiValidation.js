@@ -2,11 +2,11 @@ const { bookSchema } = require("../models/joiSchema");
 const ErrorHander = require("../utils/errorhander");
 
 module.exports.validateBook = async (req, res, next) => {
-  console.log("In ValidateBook middleware!");
+  // console.log("In ValidateBook middleware!");
 
   //   req.body.price = parseInt(req.body.price);
   //   req.body.stock = parseInt(req.body.stock);
-  console.log(req.body);
+  // console.log(req.body);
   const { error } = await bookSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");

@@ -25,6 +25,7 @@ function TableList() {
   //bootstrap toast
   const [showToast, setShowToast] = useState(false);
   const [toastErrorMessage, setToastErrorMessage] = useState("");
+  const [toastColor, setToastColor] = useState("");
 
   // navigate To Update Route
   const history = useHistory();
@@ -39,13 +40,15 @@ function TableList() {
     navigateToUpdateRoute(route);
   };
 
+  //Handle Delete
   const handleDelete = async (e) => {
     // console.log(e.currentTarget.id);
     const response = await axios.delete(
       `http://localhost:4000/api/v1/admin/book/${e.currentTarget.id}`
     );
-
+    console.log(response);
     setToastErrorMessage(response.data.message);
+    setToastColor("success");
     setShowToast(true);
     //ensuring that books has been successfully deleted from DB
     setIsDeleted(!isDeleted);
@@ -65,11 +68,12 @@ function TableList() {
       if (response.data.success === false) {
         setIsLoading(false);
         setIsError(true);
-        setErrorMessage(response.data.message);
+        setToastErrorMessage(response.data.message);
       }
       if (location.state.message) {
-        console.log(location.state.message);
+        // console.log(location.state.message);
         setToastErrorMessage(location.state.message);
+        setToastColor("success");
         setShowToast(true);
       }
     };
@@ -96,12 +100,12 @@ function TableList() {
                 minHeight: "100px",
                 zIndex: "999",
                 width: "800px",
-                opacity: "0.9",
+                // opacity: "0.9",
               }}>
               <ToastContainer position="bottom-end" className="p-3">
                 <Toast
                   onClose={() => setShowToast(false)}
-                  bg="danger"
+                  bg={`${toastColor} text-white`}
                   show={showToast}
                   delay={3000}
                   autohide>

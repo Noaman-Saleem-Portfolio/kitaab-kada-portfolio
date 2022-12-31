@@ -36,3 +36,5 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   });
 });
+
+//pm2 to restart the server in production on permanent bassis

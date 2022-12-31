@@ -31,10 +31,10 @@ exports.createBookAdmin = catchAsyncErrors(async (req, res, next) => {
   //   });
   // book.save();
   // }
-  console.log("IN Create book controller.");
+  // console.log("IN Create book controller.");
   let { title, author, description, category, price, stock } = req.body;
 
-  console.log({ title, author, description, category, price, stock });
+  // console.log({ title, author, description, category, price, stock });
 
   const book = await new Book({
     title,

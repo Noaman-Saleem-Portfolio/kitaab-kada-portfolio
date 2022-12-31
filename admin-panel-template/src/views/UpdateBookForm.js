@@ -98,7 +98,7 @@ function UpdateBookForm() {
                 minHeight: "100px",
                 zIndex: "999",
                 width: "800px",
-                opacity: "0.9",
+                // opacity: "0.9",
               }}>
               <ToastContainer position="bottom-end" className="p-3">
                 <Toast
