@@ -1,0 +1,66 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+//Redux Store
+import { fetchBooks } from "../../redux/slices/booksSlice";
+import { STATUSES } from "../../redux/slices/booksSlice";
+
+//Bootstrap components
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
+const Results = () => {
+  const dispatch = useDispatch();
+  const { data: books, status, name } = useSelector((state) => state.books);
+
+  useEffect(() => {
+    dispatch(fetchBooks());
+  }, []);
+
+  // console.log(books);
+
+  if (status === STATUSES.LOADING) {
+    return <h2>Loading....</h2>;
+  }
+
+  if (status === STATUSES.ERROR) {
+    return <h2>Something went wrong!</h2>;
+  }
+
+  return (
+    <>
+      <div className="book-search-results">
+        <div className="header">
+          <h2>Search Results</h2>
+
+          <hr />
+        </div>
+        <div className="book-cards">
+          <Row>
+            {books.map((item, index) => {
+              return (
+                <Col key={index} sm={4}>
+                  <div className="book-card">
+                    <img src="" alt="Here will come image" />
+                    <h6>{item.title}</h6>
+                    <h6>
+                      <span className="by">by</span> {item.author}
+                    </h6>
+                    <p className="price">
+                      <span className="dollar">$</span>
+                      {item.price}
+                    </p>
+                    <p className="catagory">Category : {item.catagory}</p>
+                    <button>Add To Cart</button>
+                  </div>
+                </Col>
+              );
+            })}
+          </Row>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Results;

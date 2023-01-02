@@ -55,6 +55,11 @@ app.use("/api/v1", userRoutes);
 
 // DB_URI=mongodb+srv://noaman:musawali@cluster0.qsypljh.mongodb.net/myKitabKada?retryWrites=true&w=majority
 
+// app.get("/test", (req, res) => {
+//   res.cookie("Name", "Nomi");
+//   res.send("Testing");
+// });
+
 // Working Code Serving Admin React App Build
 app.use(express.static(path.join(__dirname, "../admin-panel-template/build")));
 app.get("/admin/*", function (req, res) {

@@ -9,10 +9,17 @@ const sendToken = (user, statusCode, res) => {
       Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    Credentials: "include",
   };
 
-  res.status(statusCode).cookie("token", token, options).json({
+  //response with Cookie Token
+  // res.status(statusCode).cookie("token", token, options).json({
+  //   success: true,
+  //   user,
+  //   token,
+  // });
+
+  //response without Cookie Token
+  res.status(statusCode).json({
     success: true,
     user,
     token,

@@ -37,6 +37,7 @@ root.render(
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
       <Route path="/unauth" render={(props) => <UnAuthLayout {...props} />} />
       <Redirect from="/" to="/admin/dashboard" />
+      {/* <Redirect from="/" to="/unauth/login" /> */}
     </Switch>
   </BrowserRouter>
 );

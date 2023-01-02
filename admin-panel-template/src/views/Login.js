@@ -10,6 +10,8 @@ function Login() {
   //   console.log(email);
   //   console.log(password);
 
+  //cookies
+
   const handleLogin = async (e) => {
     try {
       // console.log("Clicked");
@@ -18,6 +20,10 @@ function Login() {
         password,
       });
       console.log(response);
+      const { data } = response;
+
+      //Setting accessToken in Local Storage
+      localStorage.setItem("accessToken", data.token);
     } catch (error) {
       console.log("Oh No Error!!!!!!");
       console.log(error);

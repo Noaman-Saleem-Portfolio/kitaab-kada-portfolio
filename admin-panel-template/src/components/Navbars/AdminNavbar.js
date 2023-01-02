@@ -24,8 +24,15 @@ import routes from "routes.js";
 function Header() {
   const [isLogedin, setIsLogedIn] = useState(false);
 
+  //useHistory
   const location = useLocation();
   const history = useHistory();
+
+  //Navigate to login view
+  const navigateToLogin = (e) => {
+    e.preventDefault();
+    history.push("/unauth/login");
+  };
 
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
@@ -182,9 +189,10 @@ function Header() {
             {!isLogedin ? (
               <Nav.Item>
                 <Nav.Link
+                  to="/unauth/login"
                   className="m-0"
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}>
+                  // href="#pablo"
+                  onClick={(e) => navigateToLogin(e)}>
                   <span className="no-icon">Login</span>
                 </Nav.Link>
               </Nav.Item>

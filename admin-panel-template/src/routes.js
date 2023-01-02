@@ -31,7 +31,7 @@ const dashboardRoutes = [
     name: "Login",
     icon: "nc-icon nc-chart-pie-35",
     component: Login,
-    showInSideBar: true,
+    showInSideBar: false,
     layout: "/unauth",
   },
   {

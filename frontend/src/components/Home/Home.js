@@ -10,11 +10,12 @@ import Col from "react-bootstrap/Col";
 const Home = () => {
   const navigate = useNavigate();
   const [category, setCategory] = useState("all");
+  const [title, setTitle] = useState("");
 
   const searchQuery = () => {
     navigate({
       pathname: "/search",
-      search: `?category=${category}`,
+      search: `?category=${category}&title=${title}`,
     });
   };
   return (
@@ -34,7 +35,12 @@ const Home = () => {
                 </Form.Select>
               </InputGroup.Text>
 
-              <Form.Control aria-label="Text input with dropdown button" />
+              <Form.Control
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                type="text"
+                aria-label="Text input with dropdown button"
+              />
               <Button
                 onClick={searchQuery}
                 variant="outline-primary"

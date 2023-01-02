@@ -40,22 +40,6 @@ function TableList() {
     navigateToUpdateRoute(route);
   };
 
-  //Handle Delete
-  const handleDelete = async (e) => {
-    // console.log(e.currentTarget.id);
-    const response = await axios.delete(
-      `http://localhost:4000/api/v1/admin/book/${e.currentTarget.id}`
-    );
-    console.log(response);
-    setToastErrorMessage(response.data.message);
-    setToastColor("success");
-    setShowToast(true);
-    //ensuring that books has been successfully deleted from DB
-    setIsDeleted(!isDeleted);
-
-    // console.log(isDeleted);
-  };
-
   useEffect(() => {
     const fetchBooks = async () => {
       const response = await axios.get(
@@ -65,20 +49,40 @@ function TableList() {
       setIsLoading(false);
       setBooksCount(response.data.booksCount);
 
+      //Incase Error occurs in backend
       if (response.data.success === false) {
         setIsLoading(false);
         setIsError(true);
         setToastErrorMessage(response.data.message);
       }
+
+      //check if we are rerouting from the updatebook component
       if (location.state.message) {
         // console.log(location.state.message);
         setToastErrorMessage(location.state.message);
         setToastColor("success");
         setShowToast(true);
+        location.state.message = "";
       }
     };
     fetchBooks();
   }, [isDeleted]);
+
+  //Handle Delete
+  const handleDelete = async (e) => {
+    // console.log(e.currentTarget.id);
+    const response = await axios.delete(
+      `http://localhost:4000/api/v1/admin/book/${e.currentTarget.id}`
+    );
+    console.log(response.data.message);
+    setToastErrorMessage(response.data.message);
+    setToastColor("success");
+    setShowToast(true);
+    //ensuring that books has been successfully deleted from DB
+    setIsDeleted(!isDeleted);
+
+    // console.log(isDeleted);
+  };
 
   if (isLoading) {
     return <h1>Loading ........</h1>;

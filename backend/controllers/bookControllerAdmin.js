@@ -74,6 +74,7 @@ exports.updateBook = catchAsyncErrors(async (req, res, next) => {
     success: true,
     updatedBook,
     message: "Book has been updated successfully!",
+    type: "update",
   });
 });
 

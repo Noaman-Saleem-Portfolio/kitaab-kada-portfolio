@@ -8,23 +8,38 @@ export const STATUSES = Object.freeze({
 });
 
 const booksSlice = createSlice({
-  name: "books",
+  name: "book",
   initialState: {
     data: [],
     status: STATUSES.IDLE,
   },
   reducers: {
-    // setPosts(state, action) {
-    //   state.data = action.payload;
-    // },
-    // setStatus(state, action) {
-    //   state.status = action.payload;
-    // },
+    setBooks(state, action) {
+      state.data = action.payload;
+    },
+    setStatus(state, action) {
+      state.status = action.payload;
+    },
   },
 });
 
-const {} = booksSlice.actions;
+export const { setStatus, setBooks } = booksSlice.actions;
 export default booksSlice.reducer;
+
+export function fetchBooks() {
+  return async function fetchBookThunk(dispatch, getState) {
+    dispatch(setStatus(STATUSES.LOADING));
+    try {
+      const response = await axios("http://localhost:4000/api/v1/books");
+      // console.log(response);
+      dispatch(setBooks(response.data.books));
+      dispatch(setStatus(STATUSES.IDLE));
+    } catch (error) {
+      console.log(error);
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
 
 // export function fetchPosts() {
 //     return async function fetchPostThunk(dispatch, getState) {
