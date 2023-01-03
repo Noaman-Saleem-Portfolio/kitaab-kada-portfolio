@@ -10,11 +10,20 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 const Results = () => {
+  let a = 1;
   const dispatch = useDispatch();
-  const { data: books, status, name } = useSelector((state) => state.books);
+  const { data: books, status } = useSelector((state) => state.books);
 
   useEffect(() => {
-    dispatch(fetchBooks());
+    const fetchData = async () => {
+      try {
+        dispatch(fetchBooks());
+      } catch (error) {
+        console.log("OH NO ERROR");
+        console.log(error);
+      }
+    };
+    fetchData();
   }, []);
 
   // console.log(books);
@@ -32,7 +41,6 @@ const Results = () => {
       <div className="book-search-results">
         <div className="header">
           <h2>Search Results</h2>
-
           <hr />
         </div>
         <div className="book-cards">
@@ -50,7 +58,7 @@ const Results = () => {
                       <span className="dollar">$</span>
                       {item.price}
                     </p>
-                    <p className="catagory">Category : {item.catagory}</p>
+                    <p className="catagory">Category : {item.category}</p>
                     <button>Add To Cart</button>
                   </div>
                 </Col>

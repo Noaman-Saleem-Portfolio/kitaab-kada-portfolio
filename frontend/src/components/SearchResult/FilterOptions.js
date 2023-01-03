@@ -1,7 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 
 const FilterOptions = () => {
-  const navRef = useRef(null);
   //Saving selected filters in an array called selectedFilters
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [isCheckedCategory, setIsCheckedCategory] = useState(false);

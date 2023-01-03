@@ -12,6 +12,8 @@ const booksSlice = createSlice({
   initialState: {
     data: [],
     status: STATUSES.IDLE,
+    queryFields: { name: "nomi" },
+    dummy: 2222,
   },
   reducers: {
     setBooks(state, action) {
@@ -20,21 +22,39 @@ const booksSlice = createSlice({
     setStatus(state, action) {
       state.status = action.payload;
     },
+    setQueryFields(state, action) {
+      state.queryFields = action.payload;
+    },
+    setDummy(state, action) {
+      state.dummy = action.payload;
+    },
   },
 });
 
-export const { setStatus, setBooks } = booksSlice.actions;
+export const { setStatus, setBooks, setDummy, setQueryFields } =
+  booksSlice.actions;
 export default booksSlice.reducer;
 
 export function fetchBooks() {
   return async function fetchBookThunk(dispatch, getState) {
-    dispatch(setStatus(STATUSES.LOADING));
     try {
-      const response = await axios("http://localhost:4000/api/v1/books");
-      // console.log(response);
+      // console.log(getState().books.filterParams);
+      const { category, title } = getState().books.queryFields;
+      dispatch(setStatus(STATUSES.LOADING));
+      let queryString = `http://localhost:4000/api/v1/books?`;
+      if (category !== "") {
+        queryString = queryString + `category=${category}`;
+      }
+      if (title !== "") {
+        queryString = queryString + `&title=${title}`;
+      }
+      console.log(queryString);
+      const response = await axios(queryString);
+      console.log(response);
       dispatch(setBooks(response.data.books));
       dispatch(setStatus(STATUSES.IDLE));
     } catch (error) {
+      console.log("In Fectch Book Error");
       console.log(error);
       dispatch(setStatus(STATUSES.ERROR));
     }

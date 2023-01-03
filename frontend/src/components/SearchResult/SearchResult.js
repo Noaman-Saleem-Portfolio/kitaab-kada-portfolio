@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { STATUSES, setQueryFields } from "../../redux/slices/booksSlice";
+
+//Redux Store
+import { fetchBooks } from "../../redux/slices/booksSlice";
+import { setBooks, setStatus } from "../../redux/slices/booksSlice";
 
 //Search Page components
 import FilterOptions from "./FilterOptions";
@@ -14,20 +20,34 @@ import Col from "react-bootstrap/Col";
 import "./searchResult.css";
 
 const SearchResult = () => {
+  const dispatch = useDispatch();
+
   //Converting search params into an object
   const [searchParams, setSearchParams] = useSearchParams();
   const [filterParams, setFilterParams] = useState(
     Object.fromEntries([...searchParams])
   );
 
+  // console.log({ ...filterParams });
+  dispatch(setQueryFields({ ...filterParams }));
+
   // useEffect(() => {
-  //   const fetchBooks = async () => {
-  //     let response = await axios.get(
-  //       "http://localhost:4000/api/v1/admin/book/new"
-  //     );
-  //     console.log(response.data);
+  //   const fetchData = async () => {
+  //     dispatch(setStatus(STATUSES.LOADING));
+  //     try {
+  //       let response = await axios.get(
+  //         `http://localhost:4000/api/v1/books?category=${filterParams.category}&title=${filterParams.title}`
+  //       );
+  //       // console.log(response.data);
+
+  //       dispatch(setBooks(response.data.books));
+  //       dispatch(setStatus(STATUSES.IDLE));
+  //     } catch (error) {
+  //       console.log("OH NO ERROR");
+  //       console.log(error);
+  //     }
   //   };
-  //   fetchBooks();
+  //   fetchData();
   // }, []);
 
   return (
@@ -40,7 +60,7 @@ const SearchResult = () => {
           </Col>
           <Col md={8} style={{ borderLeft: "1px solid #c8c9ca" }}>
             {/* Search Result Section */}
-            <Results></Results>
+            <Results filterParams={filterParams}></Results>
           </Col>
         </Row>
       </Container>
