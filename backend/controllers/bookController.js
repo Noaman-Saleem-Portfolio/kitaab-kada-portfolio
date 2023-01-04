@@ -7,7 +7,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 // Get All Books
 exports.getAllBooks = catchAsyncErrors(async (req, res, next) => {
   let query;
-
+  console.log("i am in backend");
   // Copy req.query
   const reqQuery = { ...req.query };
   console.log(reqQuery);
@@ -46,7 +46,7 @@ exports.getAllBooks = catchAsyncErrors(async (req, res, next) => {
   // ////////////////////////////////////////////////////////////
   // const books = await Book.find();
   const booksCount = books.length;
-  res.status(201).json({
+  res.status(200).json({
     success: true,
     booksCount,
     books,

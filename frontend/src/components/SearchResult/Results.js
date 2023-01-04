@@ -10,9 +10,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 const Results = () => {
-  let a = 1;
   const dispatch = useDispatch();
-  const { data: books, status } = useSelector((state) => state.books);
+  const {
+    data: books,
+    status,
+    queryFields,
+  } = useSelector((state) => state.books);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +27,7 @@ const Results = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [queryFields]);
 
   // console.log(books);
 

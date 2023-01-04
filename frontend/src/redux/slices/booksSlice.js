@@ -12,7 +12,7 @@ const booksSlice = createSlice({
   initialState: {
     data: [],
     status: STATUSES.IDLE,
-    queryFields: { name: "nomi" },
+    queryFields: {},
     dummy: 2222,
   },
   reducers: {
@@ -39,18 +39,25 @@ export function fetchBooks() {
   return async function fetchBookThunk(dispatch, getState) {
     try {
       // console.log(getState().books.filterParams);
-      const { category, title } = getState().books.queryFields;
+      const { category, title, language, priceRange } =
+        getState().books.queryFields;
       dispatch(setStatus(STATUSES.LOADING));
       let queryString = `http://localhost:4000/api/v1/books?`;
-      if (category !== "") {
+      if (category !== undefined) {
         queryString = queryString + `category=${category}`;
       }
-      if (title !== "") {
+      if (title !== undefined && title !== "") {
         queryString = queryString + `&title=${title}`;
+      }
+      if (language !== undefined) {
+        queryString = queryString + `&language=${language}`;
+      }
+      if (priceRange !== undefined) {
+        queryString = queryString + `&priceRange=${priceRange}`;
       }
       console.log(queryString);
       const response = await axios(queryString);
-      console.log(response);
+      // console.log(response);
       dispatch(setBooks(response.data.books));
       dispatch(setStatus(STATUSES.IDLE));
     } catch (error) {

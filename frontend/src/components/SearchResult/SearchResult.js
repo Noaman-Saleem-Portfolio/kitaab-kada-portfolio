@@ -38,7 +38,7 @@ const SearchResult = () => {
   //       let response = await axios.get(
   //         `http://localhost:4000/api/v1/books?category=${filterParams.category}&title=${filterParams.title}`
   //       );
-  //       // console.log(response.data);
+  //       console.log(response.data);
 
   //       dispatch(setBooks(response.data.books));
   //       dispatch(setStatus(STATUSES.IDLE));

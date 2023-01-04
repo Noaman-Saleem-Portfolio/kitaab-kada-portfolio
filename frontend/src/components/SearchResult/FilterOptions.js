@@ -1,19 +1,29 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+
+//Redux Store
+import { fetchBooks } from "../../redux/slices/booksSlice";
+import {
+  setBooks,
+  setStatus,
+  setQueryFields,
+} from "../../redux/slices/booksSlice";
 
 const FilterOptions = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const dispatch = useDispatch();
+
+  //Getting state from Redux store
+  const { queryFields } = useSelector((state) => state.books);
+
   //Saving selected filters in an array called selectedFilters
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  const [isCheckedCategory, setIsCheckedCategory] = useState(false);
-  const [isCheckedLanguage, setIsCheckedLanguage] = useState(false);
-  const [isCheckedPrice, setIsCheckedPrice] = useState(false);
 
   //code for only select one check-box Category
   function onlyOneCategory(e) {
     //code to remove the filter element from filter box and selectedFilters array when click on already checked checkbox
-    if (selectedFilters.includes("category") === false) {
-      let categoryName = e.currentTarget.name;
-      setSelectedFilters([...selectedFilters, categoryName]);
-    }
+
     var checkboxes = document.getElementsByName("category");
     checkboxes.forEach((item) => {
       if (item !== e.currentTarget) item.checked = false;
@@ -24,10 +34,11 @@ const FilterOptions = () => {
   function onlyOneLanguage(e) {
     //code to remove the filter element from filter box and selectedFilters array when click on already checked checkbox
 
-    if (selectedFilters.includes("language") === false) {
-      let categoryName = e.currentTarget.name;
-      setSelectedFilters([...selectedFilters, categoryName]);
-    }
+    // if (selectedFilters.includes("language") === false) {
+    //   let categoryName = e.currentTarget.name;
+    //   setSelectedFilters([...selectedFilters, categoryName]);
+    // }
+    console.log("Nomi");
 
     var checkboxes = document.getElementsByName("language");
     checkboxes.forEach((item) => {
@@ -37,14 +48,53 @@ const FilterOptions = () => {
 
   //code for only select one check-box Price Range
   function onlyOnePriceRange(e) {
-    if (selectedFilters.includes("priceRange") === false) {
-      let categoryName = e.currentTarget.name;
-      setSelectedFilters([...selectedFilters, categoryName]);
-    }
+    // if (selectedFilters.includes("priceRange") === false) {
+    //   let categoryName = e.currentTarget.name;
+    //   setSelectedFilters([...selectedFilters, categoryName]);
+    // }
+
     var checkboxes = document.getElementsByName("priceRange");
     checkboxes.forEach((item) => {
       if (item !== e.currentTarget) item.checked = false;
     });
+  }
+
+  //logic to manipulate query string
+  function manipulateQueryFields(e) {
+    // console.log({
+    //   ...queryFields,
+    //   [e.currentTarget.name]: [e.currentTarget.value],
+    // });
+    //if category is present on queryField object than this expression will evaluate to false
+    //if category is not present on queryField object than this expression will evaluate to tre
+    if (!queryFields.hasOwnProperty("category")) {
+      dispatch(
+        setQueryFields({
+          ...queryFields,
+          [e.currentTarget.name]: [e.currentTarget.value],
+        })
+      );
+    } else {
+      //fale ----.current box is unchecked
+    }
+
+    if (!queryFields.hasOwnProperty("language")) {
+      dispatch(
+        setQueryFields({
+          ...queryFields,
+          [e.currentTarget.name]: [e.currentTarget.value],
+        })
+      );
+    }
+
+    if (!queryFields.hasOwnProperty("priceRange")) {
+      dispatch(
+        setQueryFields({
+          ...queryFields,
+          [e.currentTarget.name]: [e.currentTarget.value],
+        })
+      );
+    }
   }
 
   return (
@@ -56,19 +106,18 @@ const FilterOptions = () => {
         </div>
         <hr />
         <div className="items">
-          {selectedFilters.length > 0
-            ? selectedFilters.map((item, index) => {
+          {Object.keys(queryFields).length > 0
+            ? Object.keys(queryFields).map((item, index) => {
                 return (
                   <div className="item" key={index}>
                     {item}
                     <span
                       className={item}
                       onClick={(e) => {
-                        setSelectedFilters(
-                          selectedFilters.filter(
-                            (item) => item !== e.currentTarget.className
-                          )
-                        );
+                        // delete the seleted item from queryFields
+                        const newQueryFields = { ...queryFields };
+                        delete newQueryFields[item];
+                        dispatch(setQueryFields(newQueryFields));
 
                         //when x click uncheck the relevent checkbox
                         var checkboxes = document.getElementsByName(
@@ -100,7 +149,21 @@ const FilterOptions = () => {
                 name="category"
                 type="checkbox"
                 id="novel"
-                onChange={(e) => onlyOneCategory(e)}
+                value="novel"
+                onChange={(e) => {
+                  onlyOneCategory(e);
+                  manipulateQueryFields(e);
+                  // console.log(e.target.checked);
+
+                  if (e.currentTarget.checked === false) {
+                    // delete the selected item from queryFields
+                    const newQueryFields = { ...queryFields };
+                    // console.log(newQueryFields);
+                    delete newQueryFields[e.currentTarget.name];
+                    // console.log(newQueryFields);
+                    dispatch(setQueryFields(newQueryFields));
+                  }
+                }}
               />
               <label htmlFor="novel">Novel</label>
             </div>
@@ -110,7 +173,19 @@ const FilterOptions = () => {
                 type="checkbox"
                 name="category"
                 id="business"
-                onClick={(e) => onlyOneCategory(e)}
+                value="business"
+                onChange={(e) => {
+                  onlyOneCategory(e);
+                  manipulateQueryFields(e);
+                  if (e.currentTarget.checked === false) {
+                    // delete the selected item from queryFields
+                    const newQueryFields = { ...queryFields };
+                    // console.log(newQueryFields);
+                    delete newQueryFields[e.currentTarget.name];
+                    // console.log(newQueryFields);
+                    dispatch(setQueryFields(newQueryFields));
+                  }
+                }}
               />
               <label htmlFor="business">Business</label>
             </div>
@@ -120,7 +195,20 @@ const FilterOptions = () => {
                 type="checkbox"
                 name="category"
                 id="health"
-                onClick={(e) => onlyOneCategory(e)}
+                value={"health"}
+                onChange={(e) => {
+                  onlyOneCategory(e);
+                  manipulateQueryFields(e);
+
+                  if (e.currentTarget.checked === false) {
+                    // delete the selected item from queryFields
+                    const newQueryFields = { ...queryFields };
+                    // console.log(newQueryFields);
+                    delete newQueryFields[e.currentTarget.name];
+                    // console.log(newQueryFields);
+                    dispatch(setQueryFields(newQueryFields));
+                  }
+                }}
               />
               <label htmlFor="health">Health</label>
             </div>
@@ -133,7 +221,20 @@ const FilterOptions = () => {
                 type="checkbox"
                 name="language"
                 id="urdu"
-                onClick={(e) => onlyOneLanguage(e)}
+                value={"urdu"}
+                onChange={(e) => {
+                  onlyOneLanguage(e);
+                  manipulateQueryFields(e);
+
+                  if (e.currentTarget.checked === false) {
+                    // delete the selected item from queryFields
+                    const newQueryFields = { ...queryFields };
+                    // console.log(newQueryFields);
+                    delete newQueryFields[e.currentTarget.name];
+                    // console.log(newQueryFields);
+                    dispatch(setQueryFields(newQueryFields));
+                  }
+                }}
               />
               <label htmlFor="urdu">Urdu</label>
             </div>
@@ -143,7 +244,20 @@ const FilterOptions = () => {
                 type="checkbox"
                 name="language"
                 id="english"
-                onClick={(e) => onlyOneLanguage(e)}
+                value={"english"}
+                onChange={(e) => {
+                  onlyOneLanguage(e);
+                  manipulateQueryFields(e);
+
+                  if (e.currentTarget.checked === false) {
+                    // delete the selected item from queryFields
+                    const newQueryFields = { ...queryFields };
+                    // console.log(newQueryFields);
+                    delete newQueryFields[e.currentTarget.name];
+                    // console.log(newQueryFields);
+                    dispatch(setQueryFields(newQueryFields));
+                  }
+                }}
               />
               <label htmlFor="english">English</label>
             </div>
@@ -156,7 +270,20 @@ const FilterOptions = () => {
                 type="checkbox"
                 name="priceRange"
                 id="under10"
-                onClick={(e) => onlyOnePriceRange(e)}
+                value={10}
+                onChange={(e) => {
+                  onlyOnePriceRange(e);
+                  manipulateQueryFields(e);
+
+                  if (e.currentTarget.checked === false) {
+                    // delete the selected item from queryFields
+                    const newQueryFields = { ...queryFields };
+                    // console.log(newQueryFields);
+                    delete newQueryFields[e.currentTarget.name];
+                    // console.log(newQueryFields);
+                    dispatch(setQueryFields(newQueryFields));
+                  }
+                }}
               />
               <label htmlFor="under10">Under $10</label>
             </div>
@@ -166,7 +293,20 @@ const FilterOptions = () => {
                 type="checkbox"
                 name="priceRange"
                 id="under30"
-                onClick={(e) => onlyOnePriceRange(e)}
+                value={30}
+                onChange={(e) => {
+                  onlyOnePriceRange(e);
+                  manipulateQueryFields(e);
+
+                  if (e.currentTarget.checked === false) {
+                    // delete the selected item from queryFields
+                    const newQueryFields = { ...queryFields };
+                    // console.log(newQueryFields);
+                    delete newQueryFields[e.currentTarget.name];
+                    // console.log(newQueryFields);
+                    dispatch(setQueryFields(newQueryFields));
+                  }
+                }}
               />
               <label htmlFor="under30">$10 - $30</label>
             </div>
@@ -176,7 +316,20 @@ const FilterOptions = () => {
                 type="checkbox"
                 name="priceRange"
                 id="under50"
-                onClick={(e) => onlyOnePriceRange(e)}
+                value={50}
+                onChange={(e) => {
+                  onlyOnePriceRange(e);
+                  manipulateQueryFields(e);
+
+                  if (e.currentTarget.checked === false) {
+                    // delete the selected item from queryFields
+                    const newQueryFields = { ...queryFields };
+                    // console.log(newQueryFields);
+                    delete newQueryFields[e.currentTarget.name];
+                    // console.log(newQueryFields);
+                    dispatch(setQueryFields(newQueryFields));
+                  }
+                }}
               />
               <label htmlFor="under50">$30 - $50</label>
             </div>
@@ -186,7 +339,20 @@ const FilterOptions = () => {
                 type="checkbox"
                 name="priceRange"
                 id="above50"
-                onClick={(e) => onlyOnePriceRange(e)}
+                value={1000}
+                onChange={(e) => {
+                  onlyOnePriceRange(e);
+                  manipulateQueryFields(e);
+
+                  if (e.currentTarget.checked === false) {
+                    // delete the selected item from queryFields
+                    const newQueryFields = { ...queryFields };
+                    // console.log(newQueryFields);
+                    delete newQueryFields[e.currentTarget.name];
+                    // console.log(newQueryFields);
+                    dispatch(setQueryFields(newQueryFields));
+                  }
+                }}
               />
               <label htmlFor="above50">$50 & Above</label>
             </div>
