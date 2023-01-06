@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { STATUSES, setQueryFields } from "../../redux/slices/booksSlice";
+import { setQueryFields } from "../../redux/slices/booksSlice";
 
 //Redux Store
-import { fetchBooks } from "../../redux/slices/booksSlice";
-import { setBooks, setStatus } from "../../redux/slices/booksSlice";
 
 //Search Page components
 import FilterOptions from "./FilterOptions";
@@ -27,6 +24,9 @@ const SearchResult = () => {
   const [filterParams, setFilterParams] = useState(
     Object.fromEntries([...searchParams])
   );
+
+  // console.log(searchParams.get("title"));
+  // console.log(searchParams.get("category"));
 
   // console.log({ ...filterParams });
   dispatch(setQueryFields({ ...filterParams }));

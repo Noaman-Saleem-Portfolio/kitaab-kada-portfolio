@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //Redux Store
-import { fetchBooks } from "../../redux/slices/booksSlice";
-import { STATUSES } from "../../redux/slices/booksSlice";
+import { fetchBooks, STATUSES } from "../../redux/slices/booksSlice";
 
 //Bootstrap components
 import Row from "react-bootstrap/Row";
@@ -11,10 +10,13 @@ import Col from "react-bootstrap/Col";
 
 const Results = () => {
   const dispatch = useDispatch();
+
   const {
     data: books,
     status,
     queryFields,
+
+    page,
   } = useSelector((state) => state.books);
 
   useEffect(() => {
@@ -27,9 +29,7 @@ const Results = () => {
       }
     };
     fetchData();
-  }, [queryFields]);
-
-  // console.log(books);
+  }, [queryFields, page]);
 
   if (status === STATUSES.LOADING) {
     return <h2>Loading....</h2>;

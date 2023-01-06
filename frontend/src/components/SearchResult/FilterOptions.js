@@ -1,22 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 //Redux Store
-import { fetchBooks } from "../../redux/slices/booksSlice";
-import {
-  setBooks,
-  setStatus,
-  setQueryFields,
-} from "../../redux/slices/booksSlice";
+import { setQueryFields } from "../../redux/slices/booksSlice";
 
 const FilterOptions = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const dispatch = useDispatch();
 
   //Getting state from Redux store
   const { queryFields } = useSelector((state) => state.books);
+
+  // console.log({ ...queryFields });
 
   //Saving selected filters in an array called selectedFilters
 
@@ -38,7 +33,6 @@ const FilterOptions = () => {
     //   let categoryName = e.currentTarget.name;
     //   setSelectedFilters([...selectedFilters, categoryName]);
     // }
-    console.log("Nomi");
 
     var checkboxes = document.getElementsByName("language");
     checkboxes.forEach((item) => {
@@ -65,6 +59,7 @@ const FilterOptions = () => {
     //   ...queryFields,
     //   [e.currentTarget.name]: [e.currentTarget.value],
     // });
+
     //if category is present on queryField object than this expression will evaluate to false
     //if category is not present on queryField object than this expression will evaluate to tre
     if (!queryFields.hasOwnProperty("category")) {
@@ -74,8 +69,6 @@ const FilterOptions = () => {
           [e.currentTarget.name]: [e.currentTarget.value],
         })
       );
-    } else {
-      //fale ----.current box is unchecked
     }
 
     if (!queryFields.hasOwnProperty("language")) {
@@ -95,6 +88,11 @@ const FilterOptions = () => {
         })
       );
     }
+    // console.log(queryFields.category[0]);
+    // console.log({...queryFields});
+    // if (queryFields.hasOwnProperty("category") || queryFields.hasOwnProperty("language")||queryFields.hasOwnProperty("priceRange")) {
+    //   setSearchParams({...queryFields,[e.currentTarget.name]: [e.currentTarget.value],})
+    // }
   }
 
   return (
@@ -153,6 +151,7 @@ const FilterOptions = () => {
                 onChange={(e) => {
                   onlyOneCategory(e);
                   manipulateQueryFields(e);
+
                   // console.log(e.target.checked);
 
                   if (e.currentTarget.checked === false) {
@@ -177,6 +176,7 @@ const FilterOptions = () => {
                 onChange={(e) => {
                   onlyOneCategory(e);
                   manipulateQueryFields(e);
+
                   if (e.currentTarget.checked === false) {
                     // delete the selected item from queryFields
                     const newQueryFields = { ...queryFields };

@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import Home from "./components/Home/Home";
 import SearchResult from "./components/SearchResult/SearchResult";
+import Dummy from "./learningCode/SearchResult/Dummy";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/home" element={<Home></Home>}></Route>
           <Route path="/search" element={<SearchResult></SearchResult>}></Route>
+          <Route path="/dummy" element={<Dummy></Dummy>}></Route>
           <Route path="/" element={<Navigate to="/home" replace />}></Route>
         </Routes>
       </Provider>
