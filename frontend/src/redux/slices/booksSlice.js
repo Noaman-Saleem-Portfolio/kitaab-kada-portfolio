@@ -59,8 +59,7 @@ export function fetchBooks() {
   return async function fetchBookThunk(dispatch, getState) {
     try {
       // console.log(getState().books.filterParams);
-      const { category, title, language, priceRange } =
-        getState().books.queryFields;
+      const { category, title, language, price } = getState().books.queryFields;
 
       const { limit, page } = getState().books;
 
@@ -81,8 +80,20 @@ export function fetchBooks() {
       if (language !== undefined) {
         queryString = queryString + `&language=${language}`;
       }
-      if (priceRange !== undefined) {
-        queryString = queryString + `&priceRange=${priceRange}`;
+      if (price !== undefined) {
+        if (price == 10) {
+          queryString = queryString + `&price[gte]=1&price[lte]=10`;
+        }
+        if (price == 30) {
+          queryString = queryString + `&price[gte]=11&price[lte]=30`;
+        }
+        if (price == 50) {
+          queryString = queryString + `&price[gte]=31&price[lte]=50`;
+        }
+        if (price == 1000) {
+          queryString = queryString + `&price[gte]=51&price[lte]=1000`;
+        }
+        // queryString = queryString + `&price[gte]=${price}`;
       }
 
       if (page) {

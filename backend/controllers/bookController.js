@@ -36,9 +36,19 @@ exports.getAllBooks = catchAsyncErrors(async (req, res, next) => {
   );
 
   console.log("execution");
-  console.log(JSON.parse(queryStr));
+
+  const parsedQueryStr = JSON.parse(queryStr);
+
+  // if (parsedQueryStr.priceRange !== undefined) {
+  //   // console.log("Nomi", typeof parsedQueryStr.priceRange.$lte);
+  //   parsedQueryStr.priceRange.$gte = parseInt(parsedQueryStr.priceRange.$gte);
+  //   parsedQueryStr.priceRange.$lte = parseInt(parsedQueryStr.priceRange.$lte);
+  // }
+
+  console.log(parsedQueryStr);
+
   // Finding resource...
-  query = Book.find(JSON.parse(queryStr));
+  query = Book.find(parsedQueryStr);
 
   const totalDocuments = await Book.find(JSON.parse(queryStr)).countDocuments();
   console.log("totalDocuments : ", totalDocuments);

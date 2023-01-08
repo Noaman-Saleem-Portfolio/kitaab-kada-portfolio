@@ -47,7 +47,7 @@ const FilterOptions = () => {
     //   setSelectedFilters([...selectedFilters, categoryName]);
     // }
 
-    var checkboxes = document.getElementsByName("priceRange");
+    var checkboxes = document.getElementsByName("price");
     checkboxes.forEach((item) => {
       if (item !== e.currentTarget) item.checked = false;
     });
@@ -274,7 +274,7 @@ const FilterOptions = () => {
             <div className="checkbox">
               <input
                 type="checkbox"
-                name="priceRange"
+                name="price"
                 id="under10"
                 value={10}
                 onChange={(e) => {
@@ -297,7 +297,7 @@ const FilterOptions = () => {
             <div className="checkbox">
               <input
                 type="checkbox"
-                name="priceRange"
+                name="price"
                 id="under30"
                 value={30}
                 onChange={(e) => {
@@ -314,13 +314,13 @@ const FilterOptions = () => {
                   }
                 }}
               />
-              <label htmlFor="under30">$10 - $30</label>
+              <label htmlFor="under30">$11 - $30</label>
             </div>
 
             <div className="checkbox">
               <input
                 type="checkbox"
-                name="priceRange"
+                name="price"
                 id="under50"
                 value={50}
                 onChange={(e) => {
@@ -337,13 +337,13 @@ const FilterOptions = () => {
                   }
                 }}
               />
-              <label htmlFor="under50">$30 - $50</label>
+              <label htmlFor="under50">$31 - $50</label>
             </div>
 
             <div className="checkbox">
               <input
                 type="checkbox"
-                name="priceRange"
+                name="price"
                 id="above50"
                 value={1000}
                 onChange={(e) => {
@@ -360,7 +360,7 @@ const FilterOptions = () => {
                   }
                 }}
               />
-              <label htmlFor="above50">$50 & Above</label>
+              <label htmlFor="above50">$51 & Above</label>
             </div>
           </div>
         </div>
