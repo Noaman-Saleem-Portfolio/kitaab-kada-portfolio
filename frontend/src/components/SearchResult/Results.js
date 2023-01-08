@@ -7,6 +7,7 @@ import { fetchBooks, STATUSES } from "../../redux/slices/booksSlice";
 //Bootstrap components
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Pagination from "../Pagination/Pagination";
 
 const Results = () => {
   const dispatch = useDispatch();
@@ -15,8 +16,9 @@ const Results = () => {
     data: books,
     status,
     queryFields,
-
+    response,
     page,
+    pages,
   } = useSelector((state) => state.books);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const Results = () => {
       }
     };
     fetchData();
-  }, [queryFields, page]);
+  }, [queryFields, page, pages]);
 
   if (status === STATUSES.LOADING) {
     return <h2>Loading....</h2>;
@@ -39,11 +41,29 @@ const Results = () => {
     return <h2>Something went wrong!</h2>;
   }
 
+  if (status === STATUSES.ERROR) {
+    return <h2>Something went wrong!</h2>;
+  }
+
+  // console.log(response.data.booksCount);
+
   return (
     <>
+      <Pagination />
       <div className="book-search-results">
         <div className="header">
-          <h2>Search Results</h2>
+          <h2>
+            Search Results{" "}
+            {response.booksCount || response.booksCount === 0 ? (
+              <span style={{ fontSize: "12px" }}>
+                found Total{" "}
+                <span style={{ color: "red" }}>{response.booksCount}</span>{" "}
+                books
+              </span>
+            ) : (
+              "nomi"
+            )}{" "}
+          </h2>
           <hr />
         </div>
         <div className="book-cards">
@@ -70,6 +90,7 @@ const Results = () => {
           </Row>
         </div>
       </div>
+      <Pagination />
     </>
   );
 };

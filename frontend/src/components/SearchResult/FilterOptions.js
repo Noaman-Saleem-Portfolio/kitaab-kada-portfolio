@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { setPage } from "../../redux/slices/booksSlice";
 
 //Redux Store
 import { setQueryFields } from "../../redux/slices/booksSlice";
@@ -95,6 +95,11 @@ const FilterOptions = () => {
     // }
   }
 
+  //Pgination set Page to one on selecting new filter everytime
+  const setPageToOne = () => {
+    dispatch(setPage(1));
+  };
+
   return (
     <>
       <div className="selected-box">
@@ -162,6 +167,7 @@ const FilterOptions = () => {
                     // console.log(newQueryFields);
                     dispatch(setQueryFields(newQueryFields));
                   }
+                  setPageToOne();
                 }}
               />
               <label htmlFor="novel">Novel</label>

@@ -14,7 +14,8 @@ const booksSlice = createSlice({
     status: STATUSES.IDLE,
     queryFields: {},
     page: 1,
-    limit: 50,
+    pages: 1,
+    limit: 10,
     response: {},
     dummy: 2222,
   },
@@ -31,15 +32,27 @@ const booksSlice = createSlice({
     setResponse(state, action) {
       state.response = action.payload;
     },
+    setPage(state, action) {
+      state.page = action.payload;
+    },
+    setPages(state, action) {
+      state.pages = action.payload;
+    },
+    setDummy(state, action) {
+      state.dummy = action.payload;
+    },
   }, //reducer
-
-  setDummy(state, action) {
-    state.dummy = action.payload;
-  },
 });
 
-export const { setStatus, setBooks, setDummy, setQueryFields, setResponse } =
-  booksSlice.actions;
+export const {
+  setStatus,
+  setBooks,
+  setDummy,
+  setQueryFields,
+  setResponse,
+  setPage,
+  setPages,
+} = booksSlice.actions;
 export default booksSlice.reducer;
 
 export function fetchBooks() {
@@ -79,14 +92,20 @@ export function fetchBooks() {
 
       const response = await axios(queryString);
 
+      console.log("Response From Database");
+      console.log(response.data);
+
       dispatch(setResponse(response.data));
       dispatch(setBooks(response.data.books));
+      dispatch(setPages(response.data.pages));
       dispatch(setStatus(STATUSES.IDLE));
-      // console.log(getState().books);
+
+      console.log("Response After Dispatch");
+      console.log(response.data);
     } catch (error) {
       console.log("In Fectch Book Error");
       console.log(error);
-
+      dispatch(setResponse(error.response.data));
       dispatch(setStatus(STATUSES.ERROR));
     }
   };
