@@ -1,4 +1,6 @@
 
+/frontend/public/uploads/book-images
+
 # dependencies
 /node_modules
 /frontend/node_modules

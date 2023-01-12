@@ -12,6 +12,7 @@ const express = require("express");
 // } = require("../controllers/bookController");
 
 const { getAllBooks } = require("../controllers/bookController");
+const { isAuthenticatedUser } = require("../middleware/auth");
 // const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
 const router = express.Router();

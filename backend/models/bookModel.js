@@ -21,6 +21,9 @@ const bookSchema = mongoose.Schema({
   language: {
     type: String,
   },
+  image: {
+    type: String,
+  },
   //   ratings: {
   //     type: Number,
   //     default: 0,

@@ -1,4 +1,6 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
 const { validateBook } = require("../middleware/joiValidation");
 // const {
 //   getAllBooks,
@@ -11,6 +13,18 @@ const { validateBook } = require("../middleware/joiValidation");
 //   deleteReview,
 //   getAdminBooks,
 // } = require("../controllers/bookController");
+
+// Storage Engin That Tells/Configures Multer for where (destination) and how (filename) to save/upload our files
+const storage = multer.diskStorage({
+  destination: "./frontend/public/uploads/book-images",
+  filename: function (req, file, cb) {
+    return cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+// The Multer Middleware that is passed to routes that will receive income requests with file data (multipart/formdata)
+// You can create multiple middleware each with a different storage engine config so save different files in different locations on server
+const upload = multer({ storage: storage });
 
 const {
   getAllBooksAdmin,
@@ -30,7 +44,7 @@ router.route("/admin/books").get(getAllBooksAdmin);
 //   .get(isAuthenticatedUser, authorizeRoles("admin"), getAdminProducts);
 
 //Create new book
-router.route("/admin/book/new").post(validateBook, createBookAdmin);
+router.route("/admin/book/new").post(upload.single("image"), createBookAdmin);
 // router
 //   .route("/admin/product/new")
 //   .post(isAuthenticatedUser, authorizeRoles("admin"), createProduct);
@@ -39,7 +53,7 @@ router.route("/admin/book/new").post(validateBook, createBookAdmin);
 router
   .route("/admin/book/:id")
   .delete(deleteBook)
-  .put(validateBook, updateBook);
+  .put(upload.single("image"), updateBook);
 // router
 //   .route("/admin/product/:id")
 //   .put(isAuthenticatedUser, authorizeRoles("admin"), updateProduct)

@@ -3,18 +3,21 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-// const fileUpload = require("express-fileupload");
+const multer = require("multer");
 const path = require("path");
 
-const errorMiddleware = require("./middleware/error");
+// const fileUpload = require("express-fileupload");
 
 // Config
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({ path: "backend/config/config.env" });
 }
 
+const errorMiddleware = require("./middleware/error");
+
+// app.use(express.static(path.join(__dirname, "./upload/book-images")));
 // app.use(express.json());
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,6 +40,12 @@ app.use("/api/v1", bookRoutesAdmin);
 app.use("/api/v1", userRoutes);
 // app.use("/api/v1", order);
 // app.use("/api/v1", payment);
+
+// app.post("/multer", upload.single("image"), (req, res) => {
+//   console.log("Hitted");
+//   console.log("File:", req.file);
+//   console.log("Body:", req.body);
+// });
 
 // app.use(express.static(path.join(__dirname, "../frontend/build")));
 

@@ -11,7 +11,20 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   //   crop: "scale",
   // });
 
+  console.log(req.body);
   const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return next(
+      new ErrorHander("Provide all fields inorder to register new account", 400)
+    );
+  }
+
+  const foundUser = await User.findOne({ email });
+
+  if (foundUser) {
+    return next(new ErrorHander("Email already exists!", 400));
+  }
 
   const user = await User.create({
     name,
@@ -19,11 +32,13 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     password,
   });
 
-  sendToken(user, 201, res);
+  //201 created
+  sendToken(user, 201, res, req);
 });
 
 // Login User
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+  console.log("Login Controller :", req.body);
   const { email, password } = req.body;
 
   // checking if user has given password and email both
@@ -44,7 +59,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Invalid email or password", 401));
   }
 
-  sendToken(user, 200, res);
+  sendToken(user, 201, res, req);
 });
 
 // Logout User

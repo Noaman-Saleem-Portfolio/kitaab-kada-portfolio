@@ -19,6 +19,7 @@ function Create() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
   const [price, setPrice] = useState(0);
   const [category, setCategory] = useState("all");
   const [stock, setStock] = useState(0);
@@ -34,7 +35,8 @@ function Create() {
   //handle create logic
   const handleCreate = async (e) => {
     e.preventDefault();
-    // console.log(author);
+    // console.log(image);
+    // console.log(title);
 
     // try {
     //   const response = await axios.post(
@@ -52,24 +54,31 @@ function Create() {
     // } catch (error) {
     //   console.log("Error ---> ", e);
     // }
+
+    let formData = new FormData();
+    formData.append("title", title);
+    formData.append("author", author);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("category", category);
+    formData.append("stock", stock);
+    formData.append("image", image);
+
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
+    };
+    console.log("FormData: ", formData.get("image"));
     axios
-      .post(`http://localhost:4000/api/v1/admin/book/new`, {
-        title,
-        author,
-        description,
-        price,
-        category,
-        stock,
-      })
+      .post(`http://localhost:4000/api/v1/admin/book/new`, formData, config)
       .then((response) => {
-        // console.log("Response:", response);
+        console.log("Response:", response);
         navigateToList("/admin/table");
         // console.log(response.data.success);
       })
       .catch((e) => {
         // const isCreated = e.response.data.success;
         // setIsError(e.response.data.success);
-        // console.log("Error ---> ", e);
+        console.log("Error ---> ", e);
         setToastErrorMessage(e.response.data.message);
         setShowToast(true);
       });
@@ -115,6 +124,7 @@ function Create() {
             {/* Toast Div */}
           </Col>
         </Row>
+
         <Row>
           <Col md="12">
             <Card>
@@ -122,7 +132,7 @@ function Create() {
                 <Card.Title as="h4">Add New Book</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Form>
+                <Form onSubmit={(e) => handleCreate(e)}>
                   <Row>
                     <Col className="pr-1" md="6">
                       <Form.Group>
@@ -179,6 +189,18 @@ function Create() {
                           type="text"></Form.Control>
                       </Form.Group>
                     </Col>
+                    <Col className="pr-1" md="6">
+                      <Form.Group>
+                        <label>Image</label>
+                        <Form.Control
+                          onChange={(e) => {
+                            console.log(e.target.files);
+                            setImage(e.target.files[0]);
+                          }}
+                          defaultValue={image}
+                          type="file"></Form.Control>
+                      </Form.Group>
+                    </Col>
                     <Col style={{ margin: "auto" }}>
                       <Form.Select
                         aria-label="Default select example"
@@ -191,7 +213,6 @@ function Create() {
                     </Col>
                   </Row>
                   <Button
-                    onClick={(e) => handleCreate(e)}
                     className="btn-fill pull-right"
                     type="submit"
                     variant="info"

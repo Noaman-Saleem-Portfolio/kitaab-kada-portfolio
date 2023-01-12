@@ -20,6 +20,7 @@ function UpdateBookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [stock, setStock] = useState("");
@@ -44,26 +45,43 @@ function UpdateBookForm() {
   const handleUpdate = async (e) => {
     // console.log("handle");
     e.preventDefault();
-    const updatedObject = {
-      title,
-      author,
-      description,
-      price,
-      category,
-      stock,
-    };
+    // const updatedObject = {
+    //   title,
+    //   author,
+    //   description,
+    //   image,
+    //   price,
+    //   category,
+    //   stock,
+    // };
     // console.log(updatedObject);
+
+    let formData = new FormData();
+    formData.append("title", title);
+    formData.append("author", author);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("category", category);
+    formData.append("stock", stock);
+    formData.append("image", image);
+
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
+    };
+    console.log("FormData: ", formData.get("image"));
+
     axios
       .put(
         `http://localhost:4000/api/v1/admin/book/${params.id}`,
-        updatedObject
+        formData,
+        config
       )
       .then((response) => {
-        // console.log("Response:", response);
+        console.log("Response:", response);
         navigateToList("/admin/table", response.data.message);
       })
       .catch((e) => {
-        // console.log("Error ---> ", e);
+        console.log("Error ---> ", e);
         setToastErrorMessage(e.response.data.message);
         setShowToast(true);
       });
@@ -81,6 +99,7 @@ function UpdateBookForm() {
       setDescription(book.description);
       setPrice(book.price);
       setCategory(book.category);
+      setImage(book.image);
       setStock(book.stock);
     };
     fetchBooks();
@@ -133,7 +152,7 @@ function UpdateBookForm() {
                 <Card.Title as="h4">Update Book Info</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Form>
+                <Form onSubmit={(e) => handleUpdate(e)}>
                   <Row>
                     <Col className="pr-1" md="6">
                       <Form.Group>
@@ -194,6 +213,19 @@ function UpdateBookForm() {
                       </Form.Group>
                     </Col>
 
+                    <Col className="pr-1" md="6">
+                      <Form.Group>
+                        <label>Image</label>
+                        <Form.Control
+                          onChange={(e) => {
+                            console.log(e.target.files);
+                            setImage(e.target.files[0]);
+                          }}
+                          defaultValue={book.image}
+                          type="file"></Form.Control>
+                      </Form.Group>
+                    </Col>
+
                     <Col style={{ margin: "auto" }}>
                       <Form.Select
                         aria-label="Default select example"
@@ -222,7 +254,6 @@ function UpdateBookForm() {
                     </Col>
                   </Row>
                   <Button
-                    onClick={(e) => handleUpdate(e)}
                     className="btn-fill pull-right"
                     type="submit"
                     variant="info"

@@ -20,31 +20,27 @@ exports.getAllBooksAdmin = catchAsyncErrors(async (req, res, next) => {
 
 //Create Product Admin
 exports.createBookAdmin = catchAsyncErrors(async (req, res, next) => {
-  // for (let i = 1; i < 6; i++) {
-  //   const book = await new Book({
-  //     title: `title ${i}`,
-  //     author: `author ${i}`,
-  //     description: `description ${i}`,
-  //     price: i,
-  //     category: "business",
-  //     stock: i,
-  //   });
-  // book.save();
-  // }
   // console.log("IN Create book controller.");
+
+  // console.log("In book controller");
+  console.log("req.file", req.file);
+  console.log("req.file.filename", req.file.filename);
+  console.log("req.body", req.body);
+
   let { title, author, description, category, price, stock } = req.body;
 
-  // console.log({ title, author, description, category, price, stock });
+  console.log({ title, author, description, category, price, stock });
 
-  const book = await new Book({
+  const book = new Book({
     title,
     author,
     description,
     category,
     price,
     stock,
+    image: req.file.filename,
   });
-  book.save();
+  await book.save();
 
   // 201 "created"
   res.status(201).json({
@@ -64,11 +60,19 @@ exports.updateBook = catchAsyncErrors(async (req, res, next) => {
   if (!book) {
     return next(new ErrorHander("Book not found", 404));
   }
-  const updatedBook = await Book.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
+
+  const image = req.file.filename;
+  const { title, author, description, price, category, stock } = req.body;
+
+  const updatedBook = await Book.findByIdAndUpdate(
+    id,
+    { title, author, description, image, price, category, stock },
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
 
   res.status(200).json({
     success: true,

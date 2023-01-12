@@ -72,7 +72,15 @@ const Results = () => {
               return (
                 <Col key={index} sm={4}>
                   <div className="book-card">
-                    <img src="" alt="Here will come image" />
+                    <img
+                      style={{
+                        width: "100%",
+                        height: "200px",
+                        marginBottom: "10px",
+                      }}
+                      src={`/uploads/book-images/${item.image}`}
+                      alt="Here will come image"
+                    />
                     <h6>{item.title}</h6>
                     <h6>
                       <span className="by">by</span> {item.author}
