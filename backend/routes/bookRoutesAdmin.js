@@ -16,7 +16,7 @@ const { validateBook } = require("../middleware/joiValidation");
 
 // Storage Engin That Tells/Configures Multer for where (destination) and how (filename) to save/upload our files
 const storage = multer.diskStorage({
-  destination: "./frontend/public/uploads/book-images",
+  destination: "./backend/public/images/books",
   filename: function (req, file, cb) {
     return cb(null, Date.now() + "-" + file.originalname);
   },

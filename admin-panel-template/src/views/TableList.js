@@ -45,6 +45,7 @@ function TableList() {
       const response = await axios.get(
         "http://localhost:4000/api/v1/admin/books"
       );
+      // console.log(response.data);
       setBooks(response.data.books);
       setIsLoading(false);
       setBooksCount(response.data.booksCount);
@@ -163,6 +164,7 @@ function TableList() {
                       })}
                       <th className="border-0">Update</th>
                       <th className="border-0">Delete</th>
+                      <th className="border-0">Image</th>
                       {/* <th className="border-0">ID</th>
                       <th className="border-0">Name</th>
                       <th className="border-0">Salary</th>
@@ -176,13 +178,18 @@ function TableList() {
                         <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{b.title}</td>
+
                           <td>
                             {b.description.slice(0, 15) +
                               (b.description.length > 15 ? "..." : "")}
                           </td>
+
                           <td>{b.price}</td>
+
                           <td>{b.category ? b.category : "Not-set"}</td>
+
                           <td>{b.stock}</td>
+
                           <td>
                             <Button
                               id={b._id}
@@ -202,6 +209,19 @@ function TableList() {
                               size="sm">
                               Delete
                             </Button>
+                          </td>
+
+                          <td>
+                            {" "}
+                            <img
+                              style={{
+                                width: "100%",
+                                height: "50px",
+                                marginBottom: "10px",
+                              }}
+                              src={`http://localhost:4000/static/images/books/${b.image}`}
+                              alt="...book image"
+                            />
                           </td>
                         </tr>
                       );

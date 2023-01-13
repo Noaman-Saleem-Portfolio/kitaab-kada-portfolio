@@ -7,8 +7,9 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 // Get All Books
 exports.getAllBooksAdmin = catchAsyncErrors(async (req, res, next) => {
   const books = await Book.find().select(
-    "stock title category description price _id"
+    "stock title category description image price _id"
   );
+  // console.log(books);
   const booksCount = await Book.countDocuments();
   res.status(201).json({
     success: true,

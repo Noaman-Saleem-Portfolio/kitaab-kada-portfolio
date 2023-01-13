@@ -78,7 +78,7 @@ const Results = () => {
                         height: "200px",
                         marginBottom: "10px",
                       }}
-                      src={`/uploads/book-images/${item.image}`}
+                      src={`http://localhost:4000/static/images/books/${item.image}`}
                       alt="Here will come image"
                     />
                     <h6>{item.title}</h6>

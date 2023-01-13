@@ -15,7 +15,10 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 
 const errorMiddleware = require("./middleware/error");
 
-// app.use(express.static(path.join(__dirname, "./upload/book-images")));
+//Making public folder public for all
+console.log(__dirname);
+app.use("/static", express.static(path.join(__dirname, "/public")));
+
 // app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: "50mb" }));
